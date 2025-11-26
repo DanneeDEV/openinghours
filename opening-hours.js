@@ -1,4 +1,4 @@
-console.log("Opening-hours script LOADEDD");
+console.log("Opening-hours script LOADED");
 
 (function () {
     function initOpeningHours() {
@@ -9,39 +9,79 @@ console.log("Opening-hours script LOADEDD");
             return;
         }
 
+        // 0 = Sunday, 6 = Saturday
         const schedule = {
-            0: null,      // Sunday closed
-            1: [10, 16],  // Mon–Fri 10–16
-            2: [10, 16],
-            3: [10, 16],
-            4: [10, 16],
-            5: [10, 16],
-            6: [10, 14]   // Saturday 10–14
+            0: null,       // Sunday closed
+            1: null,       // Monday closed
+            2: [11, 17],   // Tuesday 11–17
+            3: [11, 17],   // Wednesday
+            4: [11, 17],   // Thursday
+            5: [11, 17],   // Friday
+            6: [10, 14]    // Saturday 10–14
         };
+
+        const weekdayNames = [
+            "söndag",
+            "måndag",
+            "tisdag",
+            "onsdag",
+            "torsdag",
+            "fredag",
+            "lördag"
+        ];
 
         const now = new Date();
         const day = now.getDay();
         const hour = now.getHours();
 
-        const hours = schedule[day];
+        const todaysHours = schedule[day];
+
+        function findNextOpenDay(fromDay) {
+            // look up to 7 days ahead
+            for (let i = 1; i <= 7; i++) {
+                const checkDay = (fromDay + i) % 7;
+                const hours = schedule[checkDay];
+                if (hours) {
+                    return { dayIndex: checkDay, openHour: hours[0] };
+                }
+            }
+            return null; // no opening found (shouldn't happen here)
+        }
 
         let text = "";
         let statusClass = "";
 
-        if (!hours) {
-            text = "Stängt idag";
+        if (todaysHours && hour >= todaysHours[0] && hour < todaysHours[1]) {
+            // Open right now
+            const [open, close] = todaysHours;
+            text = `Öppet just nu — ${open}:00–${close}:00`;
+            statusClass = "open";
+        } else if (todaysHours && hour < todaysHours[0]) {
+            // Closed now, but opens later today
+            const [open] = todaysHours;
+            text = `Stängt — öppnar idag ${open}:00`;
             statusClass = "closed";
         } else {
-            const [open, close] = hours;
+            // Either:
+            // - today is fully closed (todaysHours == null)
+            // - or we've passed today's closing time
+            const next = findNextOpenDay(day);
 
-            if (hour >= open && hour < close) {
-                text = `Öppet just nu — ${open}:00–${close}:00`;
-                statusClass = "open";
-            } else if (hour < open) {
-                text = `Stängt — öppnar idag ${open}:00`;
+            if (!next) {
+                text = "Stängt — öppettider ej tillgängliga";
                 statusClass = "closed";
             } else {
-                text = `Stängt — öppnar imorgon ${open}:00`;
+                const { dayIndex, openHour } = next;
+                const isTomorrow = dayIndex === (day + 1) % 7;
+
+                let dayText;
+                if (isTomorrow) {
+                    dayText = "imorgon";
+                } else {
+                    dayText = `på ${weekdayNames[dayIndex]}`;
+                }
+
+                text = `Stängt — öppnar ${dayText} ${openHour}:00`;
                 statusClass = "closed";
             }
         }
@@ -53,11 +93,11 @@ console.log("Opening-hours script LOADEDD");
         `;
     }
 
-    // If DOM is still loading, wait. Otherwise run immediately.
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", initOpeningHours);
     } else {
         initOpeningHours();
     }
 })();
+
 
