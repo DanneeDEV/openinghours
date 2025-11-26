@@ -59,7 +59,7 @@ console.log("Opening-hours script LOADED");
         } else if (todaysHours && hour < todaysHours[0]) {
             // Closed now, but opens later today
             const [open] = todaysHours;
-            text = `Stängt — Öppnar idag kl ${open}:00`;
+            text = `Stängt — öppnar idag kl ${open}:00`;
             statusClass = "closed";
         } else {
             // Either:
@@ -68,7 +68,7 @@ console.log("Opening-hours script LOADED");
             const next = findNextOpenDay(day);
 
             if (!next) {
-                text = "Stängt — Öppettider ej tillgängliga";
+                text = "Stängt — öppettider ej tillgängliga";
                 statusClass = "closed";
             } else {
                 const { dayIndex, openHour } = next;
@@ -81,7 +81,7 @@ console.log("Opening-hours script LOADED");
                     dayText = `på ${weekdayNames[dayIndex]}`;
                 }
 
-                text = `Stängt — Öppnar ${dayText} kl ${openHour}:00`;
+                text = `Stängt | vi öppnar ${dayText} kl ${openHour}:00`;
                 statusClass = "closed";
             }
         }
