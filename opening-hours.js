@@ -1,3 +1,4 @@
+console.log("Opening-hours script LOADED ");
 document.addEventListener("DOMContentLoaded", () => {
     const bar = document.getElementById("openingHoursBar");
     if (!bar) return;
