@@ -62,7 +62,7 @@ console.log("Opening-hours script LOADED");
 
             } else if (hour < open) {
                 // ✅ INNAN ÖPPNING IDAG
-                text = `Vi har öppet idag mellan ${open}-${close}`;
+                text = `Vi har öppet idag ${open}-${close}`;
                 statusClass = "closed";
 
             } else {
@@ -78,7 +78,7 @@ console.log("Opening-hours script LOADED");
 
                     if (isTomorrow) {
                         // t.ex. tisdag kväll → onsdag
-                        text = `Stängt för idag | Vi har öppet imorgon mellan ${nextOpen}-${nextClose}`;
+                        text = `Stängt för idag | Vi har öppet imorgon ${nextOpen}-${nextClose}`;
                     } else {
                         // t.ex. lördag efter stängning → tisdag
                         text = `Stängt för idag | Vi öppnar igen på ${weekdayNames[dayIndex]} kl ${nextOpen}:00`;
@@ -101,7 +101,7 @@ console.log("Opening-hours script LOADED");
 
                 if (isTomorrow) {
                     // måndag → tisdag
-                    text = `Stängt idag | Vi har öppet imorgon mellan ${nextOpen}-${nextClose}`;
+                    text = `Stängt idag | Vi har öppet imorgon ${nextOpen}-${nextClose}`;
                 } else {
                     // söndag → tisdag (eller annan “hoppa över flera dagar”)
                     text = `Stängt idag | Vi öppnar igen på ${weekdayNames[dayIndex]} kl ${nextOpen}:00`;
