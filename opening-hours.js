@@ -1,4 +1,4 @@
-console.log("Opening-hours script LOADED");
+console.log("Opening-hours script LOADEDD");
 
 (function () {
     function initOpeningHours() {
@@ -60,3 +60,4 @@ console.log("Opening-hours script LOADED");
         initOpeningHours();
     }
 })();
+
